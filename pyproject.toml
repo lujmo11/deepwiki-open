@@ -21,3 +21,5 @@ dependencies = [
   "ollama>=0.4.8",
   "aiohttp>=3.8.4"
 ]
+[project.optional-dependencies]
+azure-devops = ["azure-devops == 7.1.0b1"]

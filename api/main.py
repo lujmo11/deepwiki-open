@@ -4,6 +4,8 @@ import sys
 import logging
 from dotenv import load_dotenv
 
+import click
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -38,19 +40,35 @@ if missing_vars:
     logger.warning(f"Missing environment variables: {', '.join(missing_vars)}")
     logger.warning("Some functionality may not work correctly without these variables.")
 
-if __name__ == "__main__":
-    # Get port from environment variable or use default
+@click.command()
+@click.option("--repo-url", default=None, help="Repository URL for SCM provider detection")
+@click.option("--scm", default="auto", help="SCM provider (default: auto)")
+def main(repo_url, scm):
+    """
+    CLI entrypoint for deepwiki-open.
+    """
+    provider = None
+    if repo_url:
+        if "dev.azure.com" in repo_url or repo_url.rstrip("/").endswith(".visualstudio.com"):
+            provider = "azure_devops"
+    if provider == "azure_devops":
+        # Stub for Azure DevOps provider
+        class AzureDevOpsStub:
+            pass
+        _ = AzureDevOpsStub()
+        print("ADO selected")
+        sys.exit(0)
+
+    # Fallback: start FastAPI server as before
     port = int(os.environ.get("PORT", 8001))
-
-    # Import the app here to ensure environment variables are set first
     from api.api import app
-
     logger.info(f"Starting Streaming API on port {port}")
-
-    # Run the FastAPI app with uvicorn
     uvicorn.run(
         "api.api:app",
         host="0.0.0.0",
         port=port,
         reload=True
     )
+
+if __name__ == "__main__":
+    main()
