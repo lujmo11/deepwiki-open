@@ -8,6 +8,10 @@ import ThemeToggle from '@/components/theme-toggle';
 import Markdown from '@/components/Markdown';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { RepoInfo } from '@/types/repoinfo';
+<<<<<<< HEAD
+=======
+import { extractUrlDomain, extractUrlPath } from '@/utils/urlDecoder';
+>>>>>>> ff89b3a (Feature: WSS.)
 import getRepoUrl from '@/utils/getRepoUrl';
 
 // Helper function to add tokens and other parameters to request body
@@ -307,6 +311,7 @@ Make the workshop content in ${language === 'en' ? 'English' :
       // Add tokens if available
       addTokensToRequestBody(requestBody, token, repoInfo.type, providerParam, modelParam, isCustomModelParam, customModelParam, language);
 
+<<<<<<< HEAD
       // Use WebSocket for communication
       let content = '';
 
@@ -425,6 +430,52 @@ Make the workshop content in ${language === 'en' ? 'English' :
           console.error('Error reading stream:', readError);
           throw new Error('Error processing response stream');
         }
+=======
+      const response = await fetch(`/api/chat/stream`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => 'No error details available');
+        throw new Error(`Error generating workshop content: ${response.status} - ${errorText}`);
+      }
+
+      // Process the response
+      let content = '';
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error('Failed to get response reader');
+      }
+
+      try {
+        // Use a local variable to accumulate content
+        let accumulatedContent = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          content += chunk;
+          accumulatedContent += chunk;
+
+          // Update the state with the accumulated content
+          setWorkshopContent(accumulatedContent);
+        }
+        // Ensure final decoding
+        const finalChunk = decoder.decode();
+        content += finalChunk;
+        accumulatedContent += finalChunk;
+        setWorkshopContent(accumulatedContent);
+      } catch (readError) {
+        console.error('Error reading stream:', readError);
+        throw new Error('Error processing response stream');
+>>>>>>> ff89b3a (Feature: WSS.)
       }
 
       // Clean up markdown delimiters

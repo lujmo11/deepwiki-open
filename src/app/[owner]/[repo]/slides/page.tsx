@@ -5,8 +5,15 @@ import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { FaArrowLeft, FaSync, FaDownload, FaArrowRight, FaArrowUp, FaTimes } from 'react-icons/fa';
 import ThemeToggle from '@/components/theme-toggle';
+<<<<<<< HEAD
 import { useLanguage } from '@/contexts/LanguageContext';
 import { RepoInfo } from '@/types/repoinfo';
+=======
+import Markdown from '@/components/Markdown';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { RepoInfo } from '@/types/repoinfo';
+import { extractUrlDomain, extractUrlPath } from '@/utils/urlDecoder';
+>>>>>>> ff89b3a (Feature: WSS.)
 import getRepoUrl from '@/utils/getRepoUrl';
 
 // Helper function to add tokens and other parameters to request body
@@ -260,6 +267,7 @@ Give me the numbered list with brief descriptions for each slide. Be creative bu
       // Add tokens if available
       addTokensToRequestBody(planRequestBody, token, repoInfo.type, providerParam, modelParam, isCustomModelParam, customModelParam, language);
 
+<<<<<<< HEAD
       // Use WebSocket for communication
       let planContent = '';
 
@@ -357,6 +365,43 @@ Give me the numbered list with brief descriptions for each slide. Be creative bu
           console.error('Error reading plan stream:', readError);
           throw new Error('Error processing plan response stream');
         }
+=======
+      // Get the slide plan first
+      const planResponse = await fetch(`/api/chat/stream`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(planRequestBody)
+      });
+
+      if (!planResponse.ok) {
+        throw new Error(`Error generating slide plan: ${planResponse.status}`);
+      }
+
+      // Process the plan response
+      let planContent = '';
+      const planReader = planResponse.body?.getReader();
+      const planDecoder = new TextDecoder();
+
+      if (!planReader) {
+        throw new Error('Failed to get plan response reader');
+      }
+
+      try {
+        while (true) {
+          const { done, value } = await planReader.read();
+          if (done) break;
+          const chunk = planDecoder.decode(value, { stream: true });
+          planContent += chunk;
+        }
+        // Ensure final decoding
+        const finalChunk = planDecoder.decode();
+        planContent += finalChunk;
+      } catch (readError) {
+        console.error('Error reading plan stream:', readError);
+        throw new Error('Error processing plan response stream');
+>>>>>>> ff89b3a (Feature: WSS.)
       }
 
       // Log the plan content for debugging
@@ -536,6 +581,7 @@ Please return ONLY the HTML with no markdown formatting or code blocks. Just the
         // Add tokens if available
         addTokensToRequestBody(slideRequestBody, token, repoInfo.type, providerParam, modelParam, isCustomModelParam, customModelParam, language);
 
+<<<<<<< HEAD
         // Use WebSocket for communication
         let slideContent = '';
 
@@ -633,6 +679,43 @@ Please return ONLY the HTML with no markdown formatting or code blocks. Just the
             console.error(`Error reading slide ${slideCounter} stream:`, readError);
             throw new Error(`Error processing slide ${slideCounter} response stream`);
           }
+=======
+        // Generate this slide
+        const slideResponse = await fetch(`/api/chat/stream`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(slideRequestBody)
+        });
+
+        if (!slideResponse.ok) {
+          throw new Error(`Error generating slide ${slideCounter}: ${slideResponse.status}`);
+        }
+
+        // Process the slide response
+        let slideContent = '';
+        const slideReader = slideResponse.body?.getReader();
+        const slideDecoder = new TextDecoder();
+
+        if (!slideReader) {
+          throw new Error(`Failed to get reader for slide ${slideCounter}`);
+        }
+
+        try {
+          while (true) {
+            const { done, value } = await slideReader.read();
+            if (done) break;
+            const chunk = slideDecoder.decode(value, { stream: true });
+            slideContent += chunk;
+          }
+          // Ensure final decoding
+          const finalChunk = slideDecoder.decode();
+          slideContent += finalChunk;
+        } catch (readError) {
+          console.error(`Error reading slide ${slideCounter} stream:`, readError);
+          throw new Error(`Error processing slide ${slideCounter} response stream`);
+>>>>>>> ff89b3a (Feature: WSS.)
         }
 
         // Extract HTML content - look for content between HTML tags or code blocks
