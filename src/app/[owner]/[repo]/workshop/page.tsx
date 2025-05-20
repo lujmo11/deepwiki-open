@@ -9,9 +9,12 @@ import Markdown from '@/components/Markdown';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { RepoInfo } from '@/types/repoinfo';
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import { extractUrlDomain, extractUrlPath } from '@/utils/urlDecoder';
 >>>>>>> ff89b3a (Feature: WSS.)
+=======
+>>>>>>> 78d0b91 (Fix Lint issue.)
 import getRepoUrl from '@/utils/getRepoUrl';
 
 // Helper function to add tokens and other parameters to request body
@@ -312,6 +315,7 @@ Make the workshop content in ${language === 'en' ? 'English' :
       addTokensToRequestBody(requestBody, token, repoInfo.type, providerParam, modelParam, isCustomModelParam, customModelParam, language);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
       // Use WebSocket for communication
       let content = '';
 
@@ -445,28 +449,127 @@ Make the workshop content in ${language === 'en' ? 'English' :
       }
 
       // Process the response
+=======
+      // Use WebSocket for communication
+>>>>>>> 78d0b91 (Fix Lint issue.)
       let content = '';
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-
-      if (!reader) {
-        throw new Error('Failed to get response reader');
-      }
 
       try {
-        // Use a local variable to accumulate content
-        let accumulatedContent = '';
+        // Create WebSocket URL from the server base URL
+        const serverBaseUrl = process.env.NEXT_PUBLIC_SERVER_BASE_URL || 'http://localhost:8001';
+        const wsBaseUrl = serverBaseUrl.replace(/^http/, 'ws');
+        const wsUrl = `${wsBaseUrl}/ws/chat`;
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value, { stream: true });
-          content += chunk;
-          accumulatedContent += chunk;
+        // Create a new WebSocket connection
+        const ws = new WebSocket(wsUrl);
 
-          // Update the state with the accumulated content
-          setWorkshopContent(accumulatedContent);
+        // Create a promise that resolves when the WebSocket connection is complete
+        await new Promise<void>((resolve, reject) => {
+          // Set up event handlers
+          ws.onopen = () => {
+            console.log('WebSocket connection established for workshop generation');
+            // Send the request as JSON
+            ws.send(JSON.stringify(requestBody));
+            resolve();
+          };
+
+          ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            reject(new Error('WebSocket connection failed'));
+          };
+
+          // If the connection doesn't open within 5 seconds, fall back to HTTP
+          const timeout = setTimeout(() => {
+            reject(new Error('WebSocket connection timeout'));
+          }, 5000);
+
+          // Clear the timeout if the connection opens successfully
+          ws.onopen = () => {
+            clearTimeout(timeout);
+            console.log('WebSocket connection established for workshop generation');
+            // Send the request as JSON
+            ws.send(JSON.stringify(requestBody));
+            resolve();
+          };
+        });
+
+        // Create a promise that resolves when the WebSocket response is complete
+        await new Promise<void>((resolve, reject) => {
+          // Use a local variable to accumulate content
+          let accumulatedContent = '';
+
+          // Handle incoming messages
+          ws.onmessage = (event) => {
+            const chunk = event.data;
+            content += chunk;
+            accumulatedContent += chunk;
+
+            // Update the state with the accumulated content
+            setWorkshopContent(accumulatedContent);
+          };
+
+          // Handle WebSocket close
+          ws.onclose = () => {
+            console.log('WebSocket connection closed for workshop generation');
+            resolve();
+          };
+
+          // Handle WebSocket errors
+          ws.onerror = (error) => {
+            console.error('WebSocket error during message reception:', error);
+            reject(new Error('WebSocket error during message reception'));
+          };
+        });
+      } catch (wsError) {
+        console.error('WebSocket error, falling back to HTTP:', wsError);
+
+        // Fall back to HTTP if WebSocket fails
+        const response = await fetch(`/api/chat/stream`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text().catch(() => 'No error details available');
+          throw new Error(`Error generating workshop content: ${response.status} - ${errorText}`);
         }
+
+        // Process the response
+        content = '';
+        const reader = response.body?.getReader();
+        const decoder = new TextDecoder();
+
+        if (!reader) {
+          throw new Error('Failed to get response reader');
+        }
+
+        try {
+          // Use a local variable to accumulate content
+          let accumulatedContent = '';
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            const chunk = decoder.decode(value, { stream: true });
+            content += chunk;
+            accumulatedContent += chunk;
+
+            // Update the state with the accumulated content
+            setWorkshopContent(accumulatedContent);
+          }
+          // Ensure final decoding
+          const finalChunk = decoder.decode();
+          content += finalChunk;
+          accumulatedContent += finalChunk;
+          setWorkshopContent(accumulatedContent);
+        } catch (readError) {
+          console.error('Error reading stream:', readError);
+          throw new Error('Error processing response stream');
+        }
+<<<<<<< HEAD
         // Ensure final decoding
         const finalChunk = decoder.decode();
         content += finalChunk;
@@ -476,6 +579,8 @@ Make the workshop content in ${language === 'en' ? 'English' :
         console.error('Error reading stream:', readError);
         throw new Error('Error processing response stream');
 >>>>>>> ff89b3a (Feature: WSS.)
+=======
+>>>>>>> 78d0b91 (Fix Lint issue.)
       }
 
       // Clean up markdown delimiters
