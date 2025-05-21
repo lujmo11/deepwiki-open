@@ -1,0 +1,12 @@
+defaults:
+  - _self_
+  - turbine: default
+  - load_case_training_runs: dev_load_case
+  - evaluation: default
+
+storage_type: internal
+
+hydra:
+  output_subdir: null
+  run:
+    dir: ./local-run-logs/${now:%Y-%m-%d}/${now:%H-%M-%S}

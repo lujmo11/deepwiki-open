@@ -1,0 +1,904 @@
+# Groups of features
+feature_lists:
+  features_climate_dependent_fat: &features_climate_dependent_fat
+    - name: ws
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: ti
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      extrapolation_domain_offset: 0.06
+      is_model_input: true
+    - name: slope
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+    - name: yaw
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+    - name: rho
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+    - name: wnd_grad
+      feature_value_type: continuous
+      feature_type: engineered
+      is_model_input: true
+    - name: vexp
+      feature_type: raw
+      feature_value_type: continuous
+      is_model_input: false
+      safe_domain_method: range_validation
+    - name: twr_frq1
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_frq2
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_hh
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+
+  features_climate_dependent_fat_idling: &features_climate_dependent_fat_idling
+    - name: ws
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: ti
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: slope
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+    - name: rho
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+    - name: wnd_grad
+      feature_value_type: continuous
+      feature_type: engineered
+      is_model_input: true
+    - name: vexp
+      feature_type: raw
+      feature_value_type: continuous
+      is_model_input: false
+      safe_domain_method: range_validation
+    - name: twr_frq1
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_frq2
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_hh
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+
+  features_climate_dependent_ext: &features_climate_dependent_ext
+    - name: ws
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: ti
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: rho
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+    - name: wnd_grad
+      feature_value_type: continuous
+      feature_type: engineered
+      is_model_input: true
+    - name: vexp
+      feature_type: raw
+      feature_value_type: continuous
+      is_model_input: false
+      safe_domain_method: range_validation
+    - name: twr_frq1
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_frq2
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_hh
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+
+  features_climate_dependent_ext_ews: &features_climate_dependent_ext_ews
+    - name: ws
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: ti
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: rho
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+    - name: wnd_grad
+      feature_value_type: continuous
+      feature_type: engineered
+      is_model_input: true
+    - name: vexp
+      feature_type: raw
+      feature_value_type: continuous
+      is_model_input: false
+      safe_domain_method: range_validation
+    - name: twr_frq1
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_frq2
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_hh
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: horz_grad
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+    - name: vert_grad
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+
+  features_climate_dependent_ext_rpy: &features_climate_dependent_ext_rpy
+    - name: ws
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: ti
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: rho
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+    - name: wnd_grad
+      feature_value_type: continuous
+      feature_type: engineered
+      is_model_input: true
+    - name: vexp
+      feature_type: raw
+      feature_value_type: continuous
+      is_model_input: false
+      safe_domain_method: range_validation
+    - name: twr_frq1
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_frq2
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_hh
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: yaw_offset
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      feature_type: raw
+      is_model_input: true
+
+  features_climate_dependent_eog: &features_climate_dependent_eog
+    - name: ws
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: ti
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: rho
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+    - name: wnd_grad
+      feature_value_type: continuous
+      feature_type: engineered
+      is_model_input: true
+    - name: vexp
+      feature_type: raw
+      feature_value_type: continuous
+      is_model_input: false
+      safe_domain_method: range_validation
+    - name: twr_frq1
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_frq2
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_hh
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: eog_trigger_time
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      feature_type: raw
+      is_model_input: true
+
+  features_climate_dependent_pdot_ntm: &features_climate_dependent_pdot_ntm
+    - name: ws
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: ti
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: rho
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+    - name: wnd_grad
+      feature_value_type: continuous
+      feature_type: engineered
+      is_model_input: true
+    - name: vexp
+      feature_type: raw
+      feature_value_type: continuous
+      is_model_input: false
+      safe_domain_method: range_validation
+    - name: twr_frq1
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_frq2
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_hh
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: coherence_category
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      feature_type: raw
+      is_model_input: true
+
+  features_climate_dependent_ext_standstill:
+    &features_climate_dependent_ext_standstill
+    - name: ws
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: ti
+      feature_value_type: continuous
+      safe_domain_method: ws_ti_validation
+      feature_type: raw
+      is_model_input: true
+    - name: rho
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_frq1
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_frq2
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_hh
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: yaw
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+
+  features_climate_independent: &features_climate_independent
+    - name: twr_frq1
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_frq2
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_hh
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+
+  features_climate_independent_ws_binned:
+    &features_climate_independent_ws_binned
+    - name: ws
+      feature_value_type: continuous
+      safe_domain_method: range_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_frq1
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_frq2
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+    - name: twr_hh
+      feature_value_type: continuous
+      safe_domain_method: twr_features_validation
+      feature_type: raw
+      is_model_input: true
+
+# Target lists
+target_lists:
+  fat: &fat
+    - MxBldRoot_m1000
+    - MxBldMid_m1000
+    - MyBldRoot_m1000
+    - MyBldMid_m1000
+    - MxHub_m400
+    - MxHub_m800
+    - MyHub_m400
+    - MyHub_m800
+    - MxHub_LDD_m300
+    - MxHub_LDD_m330
+    - MyMbRot_m400
+    - MyMbRot_m800
+    - MyMbRot_LRD_m330
+    - MyMbRot_LRD_m570
+    - MyMbRot_LRD_m870
+    - MxMbRot_m400
+    - MxMbRot_m800
+    - MzMbRot_m400
+    - MzMbRot_m800
+    - MxMbFix_m400
+    - MxMbFix_m800
+    - MzMbFix_m400
+    - MzMbFix_m800
+    - MxTwrTop_Nac_m400
+    - MxTwrTop_Nac_m800
+    - MzTwrTop_Nac_m400
+    - MzTwrTop_Nac_m800
+    - MxTwrTop_Twr_m400
+    - MyTwrTop_Twr_m400
+    - MzTwrTop_Twr_m400
+    - MxTwrBot_Twr_m400
+    - MyTwrBot_Twr_m400
+    - MxTwrBot_Fnd_m400
+    - MxTwrBot_Fnd_m800
+    - MyTwrBot_Fnd_m400
+    - MyTwrBot_Fnd_m800
+    - Power_mean
+  ext: &ext
+    - MxBld_0000_max
+    - MxBld_0000_min
+    - MxBld_0250_max
+    - MxBld_0250_min
+    - MxBld_0500_max
+    - MxBld_0500_min
+    - MxBld_0750_max
+    - MxBld_0750_min
+    - MyBld_0000_max
+    - MyBld_0000_min
+    - MyBld_0250_max
+    - MyBld_0250_min
+    - MyBld_0500_max
+    - MyBld_0500_min
+    - MyBld_0750_max
+    - MyBld_0750_min
+    - MxHub_abs
+    - MyHub_abs
+    - MPitch_max
+    - MPitch_min
+    - MxMBFix_abs
+    - MyMBRot_max
+    - MyMBRot_min
+    - MxMBRot_abs
+    - MzMBFix_abs
+    - MzMBRot_abs
+    - FyMBRot_max
+    - FyMBRot_min
+    - MxTwrTop_Nac_abs
+    - MzTwrTop_Nac_abs
+    - MrTwrTop_Twr_abs
+    - MrTwrBot_Twr_max
+    - MrTwrBot_Fnd_max
+    - bldefl_max
+  ext_pdot_towers: &ext_pdot_towers
+    - MrTwrBot_Twr_max
+    - MrTwrTop_Twr_abs
+    - MrTwrBot_Fnd_max
+  ext_pdot_rna: &ext_pdot_rna
+    - MxBld_0000_max
+    - MxBld_0000_min
+    - MxBld_0250_max
+    - MxBld_0250_min
+    - MxBld_0500_max
+    - MxBld_0500_min
+    - MxBld_0750_max
+    - MxBld_0750_min
+    - MyBld_0000_max
+    - MyBld_0000_min
+    - MyBld_0250_max
+    - MyBld_0250_min
+    - MyBld_0500_max
+    - MyBld_0500_min
+    - MyBld_0750_max
+    - MyBld_0750_min
+    - MxHub_abs
+    - MyHub_abs
+    - MPitch_max
+    - MPitch_min
+    - MxMBFix_abs
+    - MyMBRot_max
+    - MyMBRot_min
+    - MxMBRot_abs
+    - MzMBFix_abs
+    - MzMBRot_abs
+    - FyMBRot_max
+    - FyMBRot_min
+    - bldefl_max
+    - MxTwrTop_Nac_abs
+    - MzTwrTop_Nac_abs
+    #- MrMB_max
+# Load case map
+load_cases:
+  dlc11:
+    name: dlc11
+    feature_list:
+      name: features_climate_dependent_fat
+      features: *features_climate_dependent_fat
+    target_list:
+      name: fat
+      targets: *fat
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: directional_twr
+    load_case_model:
+      name: deep_gpr
+      params: {}
+    max_load_evaluation_limit: 0.01
+    calculation_type: fatigue
+  dlc12IceF:
+    name: dlc12IceF
+    feature_list:
+      name: features_climate_independent
+      features: *features_climate_independent
+    target_list:
+      name: fat
+      targets: *fat
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: no_preprocessor
+    postprocessor: directional_twr
+    load_case_model:
+      name: deep_gpr
+      params: {}
+    max_load_evaluation_limit: 0.01
+    calculation_type: fatigue
+  dlc13:
+    name: dlc13
+    feature_list:
+      name: features_climate_dependent_ext
+      features: *features_climate_dependent_ext
+    target_list:
+      name: ext
+      targets: *ext
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params: {}
+    max_load_evaluation_limit: 0.2
+    calculation_type: extreme
+  dlc15:
+    name: dlc15
+    feature_list:
+      name: features_climate_dependent_ext_ews
+      features: *features_climate_dependent_ext_ews
+    target_list:
+      name: ext
+      targets: *ext
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params:
+        feature_scaler_name: min_max_scaler
+    max_load_evaluation_limit: 0.2
+    calculation_type: extreme
+  dlc21RPY:
+    name: dlc21RPY
+    feature_list:
+      name: features_climate_dependent_ext_rpy
+      features: *features_climate_dependent_ext_rpy
+    target_list:
+      name: ext
+      targets: *ext
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params:
+        feature_scaler_name: min_max_scaler
+    max_load_evaluation_limit: 0.2
+    calculation_type: extreme
+  dlc21PSB:
+    name: dlc21PSB
+    feature_list:
+      name: features_climate_dependent_ext
+      features: *features_climate_dependent_ext
+    target_list:
+      name: ext
+      targets: *ext
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params:
+        feature_scaler_name: min_max_scaler
+    max_load_evaluation_limit: 0.2
+    calculation_type: extreme
+  dlc23CoEog:
+    name: dlc23CoEog
+    feature_list:
+      name: features_climate_dependent_eog
+      features: *features_climate_dependent_eog
+    target_list:
+      name: ext_pdot_rna
+      targets: *ext_pdot_rna
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params:
+        feature_scaler_name: min_max_scaler
+    max_load_evaluation_limit: 0.2
+    calculation_type: extreme
+  dlc23NTM:
+    name: dlc23NTM
+    feature_list:
+      name: features_climate_dependent_pdot_ntm
+      features: *features_climate_dependent_pdot_ntm
+    target_list:
+      name: ext_pdot_towers
+      targets: *ext_pdot_towers
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params:
+        feature_scaler_name: min_max_scaler
+    max_load_evaluation_limit: 0.2
+    calculation_type: extreme
+  dlc32PREog:
+    name: dlc32PREog
+    feature_list:
+      name: features_climate_dependent_ext
+      features: *features_climate_dependent_ext
+    target_list:
+      name: ext_pdot_rna
+      targets: *ext_pdot_rna
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params:
+        feature_scaler_name: min_max_scaler
+    max_load_evaluation_limit: 0.2
+    calculation_type: extreme
+  dlc32NTM:
+    name: dlc32NTM
+    feature_list:
+      name: features_climate_dependent_ext
+      features: *features_climate_dependent_ext
+    target_list:
+      name: ext_pdot_towers
+      targets: *ext_pdot_towers
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params:
+        feature_scaler_name: min_max_scaler
+    max_load_evaluation_limit: 0.2
+    calculation_type: extreme
+  dlc32ETM:
+    name: dlc32ETM
+    feature_list:
+      name: features_climate_dependent_ext
+      features: *features_climate_dependent_ext
+    target_list:
+      name: ext_pdot_towers
+      targets: *ext_pdot_towers
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params:
+        feature_scaler_name: min_max_scaler
+    max_load_evaluation_limit: 0.2
+    calculation_type: extreme
+  dlc42RPEog:
+    name: dlc42RPEog
+    feature_list:
+      name: features_climate_dependent_ext
+      features: *features_climate_dependent_ext
+    target_list:
+      name: ext_pdot_rna
+      targets: *ext_pdot_rna
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params:
+        feature_scaler_name: min_max_scaler
+    max_load_evaluation_limit: 0.2
+    calculation_type: extreme
+  dlc42NTM:
+    name: dlc42NTM
+    feature_list:
+      name: features_climate_dependent_ext
+      features: *features_climate_dependent_ext
+    target_list:
+      name: ext_pdot_towers
+      targets: *ext_pdot_towers
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params:
+        feature_scaler_name: min_max_scaler
+    max_load_evaluation_limit: 0.2
+    calculation_type: extreme
+  dlc61:
+    name: dlc61
+    feature_list:
+      name: features_climate_dependent_ext_standstill
+      features: *features_climate_dependent_ext_standstill
+    target_list:
+      name: ext
+      targets: *ext
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params: {}
+    max_load_evaluation_limit: 0.2
+    calculation_type: extreme
+  dlc62:
+    name: dlc62
+    feature_list:
+      name: features_climate_dependent_ext_standstill
+      features: *features_climate_dependent_ext_standstill
+    target_list:
+      name: ext
+      targets: *ext
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params: {}
+    max_load_evaluation_limit: 0.2
+    calculation_type: extreme
+  dlc64Id:
+    name: dlc64Id
+    feature_list:
+      name: features_climate_dependent_fat_idling
+      features: *features_climate_dependent_fat_idling
+    target_list:
+      name: fat
+      targets: *fat
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: directional_twr
+    load_case_model:
+      name: deep_gpr
+      params:
+        feature_scaler_name: min_max_scaler
+      model_override:
+        MxHub_LDD_m300:
+          name: constant_regression
+          params: {}
+        MxHub_LDD_m330:
+          name: constant_regression
+          params: {}
+    max_load_evaluation_limit: 0.01
+    calculation_type: fatigue
+  dlc64LW:
+    name: dlc64LW
+    feature_list:
+      name: features_climate_dependent_fat_idling
+      features: *features_climate_dependent_fat_idling
+    target_list:
+      name: fat
+      targets: *fat
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: wind_gradient
+    postprocessor: directional_twr
+    load_case_model:
+      name: deep_gpr
+      params:
+        feature_scaler_name: min_max_scaler
+    max_load_evaluation_limit: 0.01
+    calculation_type: fatigue
+  dlcRemEnvFat:
+    name: dlcRemEnvFat
+    feature_list:
+      name: features_climate_independent_ws_binned
+      features: *features_climate_independent_ws_binned
+    target_list:
+      name: fat
+      targets: *fat
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: no_preprocessor
+    postprocessor: directional_twr
+    load_case_model:
+      name: deep_gpr
+      params: {}
+    max_load_evaluation_limit: 0.01
+    calculation_type: fatigue
+  dlcRemEnvExt:
+    name: dlcRemEnvExt
+    feature_list:
+      name: features_climate_independent
+      features: *features_climate_independent
+    target_list:
+      name: ext
+      targets: *ext
+    data_splitting:
+      name: feature_group_split
+      params:
+        grouping_features: [twr_frq1, twr_frq2, twr_hh]
+    preprocessor: no_preprocessor
+    postprocessor: no_postprocessor
+    load_case_model:
+      name: deep_gpr
+      params:
+        batch_size: 64
+        num_hidden_dims: 1
+    max_load_evaluation_limit: 0.0
+    calculation_type: extreme

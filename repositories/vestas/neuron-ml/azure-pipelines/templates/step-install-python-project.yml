@@ -1,0 +1,20 @@
+parameters:
+  - name: python_version
+    default: 3.12
+  - name: poetry_version
+    default: 1.8.5
+  - name: uv_version
+    default: 0.4.15
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "${{ parameters.python_version }}"
+    displayName: "Use Python ${{ parameters.python_version }}"
+  - bash: |
+      # Poetry + just
+      pip install poetry==${{ parameters.poetry_version }} rust-just
+    displayName: Install bootstrap dependencies
+  - bash: |
+      poetry config http-basic.MLPlatform token $(System.AccessToken)
+      just install_dev
+    displayName: Install project

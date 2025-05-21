@@ -1,0 +1,258 @@
+- name: dlc11
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc11.parquet
+    agg_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc11_grouped.parquet
+  calculate_aggregated_metrics:
+    groupby: VscTurbineId
+    weightby: hours
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc12IceF
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc12icef.parquet
+    agg_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc12icef_grouped.parquet
+  calculate_aggregated_metrics:
+    groupby: VscTurbineId
+    weightby: hours
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc13
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc13.parquet
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc15
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc15.parquet
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc21RPY
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc21rpy.parquet
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc23CoEog
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc23coeog.parquet
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc23NTM
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc23ntm.parquet
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc32PREog
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc32preog.parquet
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc32NTM
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc32ntm.parquet
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc42RPEog
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc42rpeog.parquet
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc42NTM
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc42ntm.parquet
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc64Id
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc64id.parquet
+    agg_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc64id_grouped.parquet
+  calculate_aggregated_metrics:
+    groupby: VscTurbineId
+    weightby: hours
+  load_case_model:
+    name: gpr
+    params: {}
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc64LW
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc64lw.parquet
+    agg_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc64lw_grouped.parquet
+
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc61
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc61.parquet
+  drop_features:
+    - yaw
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc62
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_dlc62.parquet
+  drop_features:
+    - yaw
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlcRemEnvExt
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_remenvext.parquet
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlcRemEnvFat
+  data:
+    training_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_remenvfat.parquet
+    agg_data_file_uri: v163_4500_mk4a_1.0/data_v163_4500_mk4a_1.0_remenvfat_grouped.parquet
+  calculate_aggregated_metrics:
+    groupby: VscTurbineId
+    weightby: hours
+  # load_case_model:
+  #   name: linear_regression
+  #   params:
+  #     fit_intercept: False
+  add_features:
+    - name: rotor_diameter
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true

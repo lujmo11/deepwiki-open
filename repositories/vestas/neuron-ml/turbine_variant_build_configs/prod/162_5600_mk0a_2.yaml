@@ -1,0 +1,6 @@
+turbine_variant:
+  mk_version: mk0a
+  rated_power: 5600
+  rotor_diameter: 162
+version: 2
+mlflow_run_id: 01a4234c8dcd404ba3dfb9ee56c4e532

@@ -1,0 +1,139 @@
+# This is a Databricks asset bundle definition for my_project.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: neuron-ml
+
+include:
+  - dbx_resources/*.yml
+
+sync:
+  exclude:
+    - "*"
+
+variables:
+  developer_email:
+    default: ${workspace.current_user.userName}
+  developer_initials:
+    default: ${workspace.current_user.short_name}
+  experiment_name:
+    description: Name of the MLFlow experiment that the training pipeline logs to
+    default: "/Users/${workspace.current_user.userName}/turbine-training-runs"
+  # This is the experiment name when mode=development after the bundle has prepended [dev initials].
+  # When referencing the experiment name other places than in the experiment resource
+  # (such as when setting an environment variable), we unfortunately need to use this.
+  developer_target_experiment_name:
+    description: Name of the MLFlow experiment when deploying to the developer target
+    default: "/Users/${workspace.current_user.userName}/[dev ${workspace.current_user.short_name}] turbine-training-runs"
+  developer_target_eval_experiment_name:
+    description: Name of the MLFlow experiment for evaluation when deploying to the developer target
+    default: "/Users/${workspace.current_user.userName}/[dev ${workspace.current_user.short_name}] turbine-eval-runs"
+
+targets:
+  # The 'developer_target' target, for development purposes. This target is the default.
+  # Users will deploy the work they are doing ibn feature branches to this target.
+  developer_target:
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-1760994821569850.10.azuredatabricks.net
+    resources:
+      jobs:
+        neuron_training_job:
+          email_notifications:
+            on_failure:
+              - ${var.developer_email}
+          job_clusters:
+            - job_cluster_key: job_cluster
+              new_cluster:
+                spark_env_vars:
+                  EXPERIMENT_NAME: ${var.developer_target_experiment_name}
+        neuron_eval_job:
+          job_clusters:
+            - job_cluster_key: eval_cluster
+              new_cluster:
+                spark_env_vars:
+                  EXPERIMENT_NAME: ${var.developer_target_eval_experiment_name}
+  # The 'dev' target, reflects what is in main.
+  dev:
+    workspace:
+      host: https://adb-1760994821569850.10.azuredatabricks.net
+    resources:
+      jobs:
+        neuron_training_job:
+          permissions:
+            - level: CAN_VIEW
+              group_name: users
+            - level: CAN_MANAGE_RUN
+              # This is the training API service principal for the dev environment.
+              service_principal_name: b29e2e16-8b92-4785-894b-d2502043d77c
+          tags:
+            env: dev
+          job_clusters:
+            - job_cluster_key: job_cluster
+              new_cluster:
+                spark_env_vars:
+                  EXPERIMENT_NAME: ${var.experiment_name}
+
+  # The 'staging' target, reflects what is in the latest release branch.
+  # Staging uses the production Databricks workspace, but deploys an isolated job resource.
+  # In staging, users can only view the resources.
+  staging:
+    workspace:
+      host: https://adb-1123038963413504.4.azuredatabricks.net
+    resources:
+      jobs:
+        neuron_training_job:
+          permissions:
+            - level: CAN_VIEW
+              group_name: users
+            - level: CAN_MANAGE_RUN
+              # This is the training API service principal for the dev environment.
+              service_principal_name: f2f93a03-9ade-4756-94de-b18512ff9a75
+          email_notifications:
+            on_failure:
+              - macdm@vestas.com
+              - javes@vestas.com
+              - karlr@vestas.com
+              - jervn@vestas.com
+          tags:
+            env: staging
+          job_clusters:
+            - job_cluster_key: job_cluster
+              new_cluster:
+                spark_env_vars:
+                  EXPERIMENT_NAME: "/Users/${workspace.current_user.userName}/[staging] turbine-training-runs"
+      experiments:
+        experiment:
+          name: "/Users/${workspace.current_user.userName}/[staging] turbine-training-runs"
+          permissions:
+            - level: CAN_READ
+              group_name: users
+
+  # The 'prod' target, reflects what is in the latest release branch.
+  # There is a manual approval gate before deploying to prod.
+  # In prod, users can only view the resources.
+  prod:
+    workspace:
+      host: https://adb-1123038963413504.4.azuredatabricks.net
+    resources:
+      jobs:
+        neuron_training_job:
+          permissions:
+            - level: CAN_VIEW
+              group_name: users
+            - level: CAN_MANAGE_RUN
+              # This is the training API service principal for the dev environment.
+              service_principal_name: f2f93a03-9ade-4756-94de-b18512ff9a75
+          email_notifications:
+            on_failure:
+              - macdm@vestas.com
+              - javes@vestas.com
+              - karlr@vestas.com
+              - jervn@vestas.com
+          tags:
+            env: prod
+          job_clusters:
+            - job_cluster_key: job_cluster
+              new_cluster:
+                spark_env_vars:
+                  EXPERIMENT_NAME: ${var.experiment_name}

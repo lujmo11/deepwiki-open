@@ -1,0 +1,6 @@
+turbine_variant:
+  mk_version: mk3f
+  rated_power: 4500
+  rotor_diameter: 150
+version: 2
+mlflow_run_id: 2db860d3989e439dafeaa83c58993985

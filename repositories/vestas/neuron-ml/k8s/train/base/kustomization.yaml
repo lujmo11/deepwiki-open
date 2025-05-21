@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yaml
+  - ingress.yaml
+  - secret.yaml
+  - service_account.yaml
+  - service.yaml
+  - servicemonitor.yaml
+
+# Set shared labels
+labels:
+  - includeSelectors: true
+    pairs:
+      app.kubernetes.io/component: webservice
+      app.kubernetes.io/instance: training-neuron
+      app.kubernetes.io/name: training
+  - includeSelectors: false
+    pairs:
+      vks.vestas.com/finance-id: CF_UID_0422
+      vks.vestas.com/tenant: neuron
+
+namePrefix: training-

@@ -1,0 +1,1 @@
+{"model_class_name": "feature_range_gpr", "features": ["feature_0", "feature_1", "feature_2", "feature_3", "feature_4"], "target_col": "target"}

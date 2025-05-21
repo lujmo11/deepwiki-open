@@ -26,6 +26,7 @@ from openai.types.chat.chat_completion import Choice
 openai = safe_import(OptionalPackages.OPENAI.value[0], OptionalPackages.OPENAI.value[1])
 
 from openai import OpenAI, AsyncOpenAI, Stream
+
 from openai import (
     APITimeoutError,
     InternalServerError,

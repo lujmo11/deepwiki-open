@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../base
+
+nameSuffix: -dev
+namespace: neuron-dev
+
+images:
+  - name: training-api
+    newName: lacneurondev.azurecr.io/training-api
+    newTag: latest

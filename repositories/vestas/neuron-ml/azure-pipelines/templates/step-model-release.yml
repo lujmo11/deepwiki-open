@@ -1,0 +1,37 @@
+parameters:
+  - name: python_version
+  - name: poetry_version
+  - name: servicePrincipalId
+  - name: servicePrincipalKey
+  - name: tenantId
+  - name: databricks_host
+  - name: model_storage_account
+  - name: env
+    values:
+      - dev
+      - prod
+
+steps:
+  - checkout: self
+  - template: step-install-python-project.yml
+    parameters:
+      python_version: ${{ parameters.python_version }}
+      poetry_version: ${{ parameters.poetry_version }}
+  - script: |
+      poetry run model_store_release \
+      --local-dir artifacts/model_store \
+      --turbine-model-config-folder turbine_variant_build_configs/${{ parameters.env }} \
+      --storage-account-name ${{ parameters.model_storage_account }} \
+      --container-name neuron-models \
+      --blob-base-path $(Build.BuildNumber) \
+      --delete-downloaded-turbine-model-version-folders \
+      --upload
+    displayName: Create model release
+    env:
+      AZURE_CLIENT_ID: ${{ parameters.servicePrincipalId }}
+      AZURE_CLIENT_SECRET: ${{ parameters.servicePrincipalKey }}
+      AZURE_TENANT_ID: ${{ parameters.tenantId }}
+      ARM_CLIENT_ID: ${{ parameters.servicePrincipalId }}
+      ARM_CLIENT_SECRET: ${{ parameters.servicePrincipalKey }}
+      ARM_TENANT_ID: ${{ parameters.tenantId }}
+      DATABRICKS_HOST: ${{ parameters.databricks_host }}

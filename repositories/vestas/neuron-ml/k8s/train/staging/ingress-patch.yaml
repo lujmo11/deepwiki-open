@@ -1,0 +1,5 @@
+# Patch ingress to have the correct host
+
+- op: replace
+  path: /spec/rules/0/host
+  value: training-neuron-staging.neuron-azweu-dev.vks.vestas.net

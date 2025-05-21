@@ -1,0 +1,76 @@
+trigger:
+  batch: true
+  branches:
+    include:
+      - main
+      - release/*
+
+variables:
+  - name: tenantId
+    value: c0701940-7b3f-4116-a59f-159078bc3c63
+  - name: python_version
+    value: 3.12
+  - name: poetry_version
+    value: 1.7.1
+  - name: isMain
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  - name: isRelease
+    value: $[contains(variables['Build.SourceBranch'], 'refs/heads/release')]
+  - name: isPullRequest
+    value: $[eq(variables['Build.Reason'], 'PullRequest')]
+
+stages:
+  - stage: DeployDev
+    displayName: "Deploy to Dev"
+    variables:
+      - group: lac-neuron-dev
+      - group: lac-neuron-kv-dev
+    condition: eq(variables.isMain, true)
+    jobs:
+      - template: templates/job-deploy-dbx-bundle.yml
+        parameters:
+          tenant_id: $(tenantId)
+          dbx_target: dev
+          databricks_azure_resource_id: $(DATABRICKS_AZURE_RESOURCE_ID)
+          service_principal_id: $(devops-sp-app-id)
+          service_principal_key: $(devops-sp-secret)
+          python_version: $(python_version)
+          poetry_version: $(poetry_version)
+
+  - stage: DeployStaging
+    displayName: "Deploy to Staging"
+    variables:
+      - group: lac-neuron-prod # We use the same variable group for staging and prod
+      - group: lac-neuron-kv-prod
+    condition: eq(variables.isRelease, true)
+    jobs:
+      - template: templates/job-deploy-dbx-bundle.yml
+        parameters:
+          tenant_id: $(tenantId)
+          dbx_target: staging
+          databricks_azure_resource_id: $(DATABRICKS_AZURE_RESOURCE_ID)
+          service_principal_id: $(devops-sp-app-id)
+          service_principal_key: $(devops-sp-secret)
+          python_version: $(python_version)
+          poetry_version: $(poetry_version)
+
+  - stage: DeployProd
+    displayName: "Deploy to Production"
+    variables:
+      - group: lac-neuron-prod
+      - group: lac-neuron-kv-prod
+    dependsOn: DeployStaging
+    condition: and(succeeded('DeployStaging'), eq(variables.isRelease, true))
+    jobs:
+      - template: templates/job-approval-gate.yml
+        parameters:
+          deploy_environment: lac-neuron-prod-env
+      - template: templates/job-deploy-dbx-bundle.yml
+        parameters:
+          tenant_id: $(tenantId)
+          dbx_target: prod
+          databricks_azure_resource_id: $(DATABRICKS_AZURE_RESOURCE_ID)
+          service_principal_id: $(devops-sp-app-id)
+          service_principal_key: $(devops-sp-secret)
+          python_version: $(python_version)
+          poetry_version: $(poetry_version)

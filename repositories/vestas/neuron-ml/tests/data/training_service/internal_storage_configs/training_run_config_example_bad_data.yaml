@@ -1,0 +1,52 @@
+# This config is used for testing with a testing `Storage` where the data in tests/data/training_service is mounted.
+turbine:
+  turbine_variant:
+    mk_version: mk3e
+    rated_power: "4000"
+    rotor_diameter: "150"
+evaluation:
+  alpha_significance_level: 0.05
+  generate_coverage_plots: false
+  fat_model_acceptance_criteria:
+    - metric: e_mean_norm
+      value: 0.01
+      condition: lt
+    - metric: e_std_norm
+      value: 0.03
+      condition: lt
+      or_metric: sigma_model_form
+      or_metric_value: 0.0
+      or_metric_condition: eq
+  ext_model_acceptance_criteria:
+    - metric: e_mean_norm
+      value: 0.01
+      condition: lt
+    - metric: e_std_norm
+      value: 0.03
+      condition: lt
+      or_metric: sigma_model_form
+      or_metric_value: 0.0
+      or_metric_condition: eq
+load_case_training_runs:
+  - calculate_aggregated_metrics:
+      groupby: VscTurbineId
+      weightby: hours
+    data:
+      agg_data_file_uri: sample_testing_data.parquet
+      # This is a path to data that does not have the expected columns for the dlc11 load case
+      training_data_file_uri: sample_training_data_bad.parquet
+    data_splitting:
+      name: random_test_train_split
+      params:
+        test_size: 0.2
+    load_case_model:
+      model_override:
+        MxBldRoot_m1000:
+          name: constant_regression
+          params:
+            constant: 0
+      name: linear_regression
+      params:
+        fit_intercept: false
+    name: dlc11
+storage_type: internal

@@ -1,0 +1,19 @@
+# Used for testing data validation
+- name: dlc11
+  data:
+    training_data_file_uri: tests/data/training_pipeline/sample_training_data_performance_steps_fat.parquet
+  data_splitting:
+    name: random_test_train_split
+    params:
+      test_size: 0.2
+  load_case_model:
+    name: linear_regression
+    params:
+      fit_intercept: False
+  feature_list:
+    name: custom_feature_list
+    features:
+      - name: ws #the test sample data for ws has many decimal places, i.e. the data is not not suitable for being applied as a discrete feature
+        feature_type: discrete
+        safe_domain_method: discrete_validation
+        feature_construction: raw

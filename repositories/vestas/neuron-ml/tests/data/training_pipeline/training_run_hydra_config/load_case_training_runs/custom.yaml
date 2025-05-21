@@ -1,0 +1,47 @@
+- name: custom_load_case
+  data:
+    training_data_file_uri: tests/data/training_pipeline/sample_training_data_performance_steps_fat.parquet
+  data_splitting:
+    name: random_test_train_split
+    params:
+      test_size: 0.2
+  load_case_model:
+    name: linear_regression
+    params:
+      fit_intercept: False
+  postprocessor: no_postprocessor
+
+  feature_list:
+    name: custom_feature_list
+    features:
+      - name: ws
+        feature_value_type: continuous
+        safe_domain_method: range_validation
+        feature_type: raw
+        is_model_input: true
+      - name: epb
+        feature_value_type: discrete
+        safe_domain_method: discrete_validation
+        feature_type: raw
+        is_model_input: true
+      - name: vtl
+        feature_value_type: discrete
+        safe_domain_method: discrete_validation
+        feature_type: raw
+        is_model_input: true
+      - name: eco
+        feature_value_type: discrete
+        safe_domain_method: discrete_validation
+        feature_type: raw
+        is_model_input: true
+      - name: power_rating
+        feature_value_type: discrete
+        safe_domain_method: discrete_validation
+        feature_type: raw
+        is_model_input: true
+  target_list:
+    name: custom_target_list
+    targets:
+      - MzTwrTop_Twr_m400
+  calculation_type: fatigue
+  max_load_evaluation_limit: 0.0

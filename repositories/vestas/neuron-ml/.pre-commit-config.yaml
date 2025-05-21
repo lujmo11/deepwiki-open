@@ -1,0 +1,50 @@
+default_language_version:
+  python: python3.12
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.15
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      # Equivalent to black formatter
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      # Don't add large files to git
+      - id: check-added-large-files
+        args: ["--maxkb=800"] # some local data files are slightly larger than 500kb
+      # Don't commit directly to main
+      - id: no-commit-to-branch
+      # Don't commit unresolved merge conflicts
+      - id: check-merge-conflict
+      # Don't commit with `breakpoint()` still present
+      - id: debug-statements
+      # Check that various config files are well-formatted
+      - id: check-toml
+      - id: check-yaml
+
+  # format markdown and yaml files
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        types: [markdown]
+        args: ["--prose-wrap", "always", "--print-width", "100"]
+      - id: prettier
+        types: [yaml]
+
+  - repo: https://github.com/python-poetry/poetry
+    rev: 1.7.1
+    hooks:
+      - id: poetry-check
+        args: ["--lock"]
+      - id: poetry-export
+        args:
+          [
+            "-o",
+            "requirements_dbx_wheel.txt",
+            "--without-hashes",
+            "--without-urls",
+          ]

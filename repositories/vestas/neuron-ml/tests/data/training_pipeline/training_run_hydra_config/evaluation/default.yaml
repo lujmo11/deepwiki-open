@@ -1,0 +1,22 @@
+alpha_significance_level: 0.05
+generate_coverage_plots: False
+fat_model_acceptance_criteria:
+  - metric: e_mean_norm
+    value: 0.01
+    condition: lt
+  - metric: e_std_norm
+    value: 0.03
+    condition: lt
+    or_metric: sigma_model_form
+    or_metric_value: 0.0
+    or_metric_condition: eq
+ext_model_acceptance_criteria:
+  - metric: e_mean_norm
+    value: 0.01
+    condition: lt
+  - metric: e_std_norm
+    value: 0.03
+    condition: lt
+    or_metric: sigma_model_form
+    or_metric_value: 0.0
+    or_metric_condition: eq

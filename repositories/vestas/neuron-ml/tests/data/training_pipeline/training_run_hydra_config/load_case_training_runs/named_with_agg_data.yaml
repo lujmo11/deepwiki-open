@@ -1,0 +1,15 @@
+- name: dlc11
+  data:
+    training_data_file_uri: tests/data/training_pipeline/sample_training_data.parquet
+    agg_data_file_uri: tests/data/training_pipeline/sample_testing_data_with_aggregation_groups.parquet
+  data_splitting:
+    name: feature_group_split
+    params:
+      grouping_features: ["twr_frq1", "twr_frq2", "twr_hh"]
+  load_case_model:
+    name: linear_regression
+    params:
+      fit_intercept: False
+  calculate_aggregated_metrics:
+    weightby: hours
+    groupby: VscTurbineId

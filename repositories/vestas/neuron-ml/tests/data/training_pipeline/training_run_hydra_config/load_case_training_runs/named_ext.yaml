@@ -1,0 +1,11 @@
+- name: dlc13
+  data:
+    training_data_file_uri: tests/data/training_pipeline/sample_training_data_performance_steps_ext.parquet
+  data_splitting:
+    name: random_test_train_split
+    params:
+      test_size: 0.2
+  load_case_model:
+    name: linear_regression
+    params:
+      fit_intercept: False

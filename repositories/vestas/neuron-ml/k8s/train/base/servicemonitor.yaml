@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: obsstack #must have this label
+  name: servicemonitor
+spec:
+  endpoints:
+    - interval: 15s
+      path: /metrics
+      port: http
+      scrapeTimeout: 5s
+  jobLabel: app.kubernetes.io/instance #it creates a label called "job" in the metric with the value defined in the label "app" above
+  selector:
+    matchLabels: #used to identify the service that exposes the metrics
+      app.kubernetes.io/instance: training-neuron

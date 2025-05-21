@@ -1,0 +1,120 @@
+parameters:
+  - name: acr_service_connection
+    type: string
+  - name: env
+    type: string
+    values:
+      - dev
+      - prod
+      - staging
+  - name: acr_login_server
+    type: string
+  - name: service_principal_id
+    type: string
+  - name: service_principal_secret
+    type: string
+  - name: storage_account_name_models
+    type: string
+  - name: model_store_token
+    type: string
+  - name: test_url
+    type: string
+    # example: https://prediction-neuron-dev.neuron-azweu-dev.vks.vestas.net/version
+
+jobs:
+  - job: build
+    dependsOn:
+      - model_release # defined in azure-pipelines/deploy-predict-api.yml
+    displayName: Build image
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - script: |
+          # Crazy hack to free up disk space. Docker build uses more than 20GB of disk space!! 
+          df -h
+          echo now freeing disk space
+          # 2024-04-25: Trying to just use a few of these tricks. It all takes time, and we don't need that much extra space
+          # sudo rm -rf /usr/local/lib/android # android sdks
+          # sudo rm -rf /usr/local/.ghcup # haskell stuff
+          sudo rm -rf /opt/hostedtoolcache/CodeQL # github code analysis engine
+          echo freed up space:
+          df -h
+        displayName: Free up disk space
+      - task: Docker@2
+        displayName: Login to ACR
+        inputs:
+          command: login
+          containerRegistry: ${{ parameters.acr_service_connection }}
+      - task: Docker@2
+        displayName: Build
+        inputs:
+          command: build
+          Dockerfile: src/neuron_prediction_service/Dockerfile
+          buildContext: .
+          containerRegistry: ${{ parameters.acr_service_connection }}
+          repository: prediction-api
+          arguments: --build-arg BUILD_NUMBER=$(Build.BuildNumber) --build-arg GIT_SHA=$(Build.SourceVersion) --build-arg AZURE_FEED_TOKEN=$(System.AccessToken) --target=final
+          tags: |
+            latest
+            $(Build.BuildNumber)
+            ${{ parameters.env }}
+        env:
+          DOCKER_BUILDKIT: 1
+      - task: Docker@2
+        displayName: Push
+        inputs:
+          command: push
+          containerRegistry: ${{ parameters.acr_service_connection }}
+          repository: prediction-api
+          tags: |
+            latest
+            $(Build.BuildNumber)
+            ${{ parameters.env }}
+  - job: deploy
+    pool: AI CoE Peered Agent Pool
+    dependsOn:
+      - build
+    steps:
+      - template: step-install-k8s-deployment-tools.yml
+      - task: DownloadSecureFile@1
+        name: kubeconfig
+        displayName: "Download kubeconfig"
+        inputs:
+          secureFile: "neuron-azweu-dev.yaml"
+      - bash: |
+          mkdir -p ~/.kube
+          cp $(kubeconfig.secureFilePath) ~/.kube/config
+          kubectl config set-context --current --namespace=neuron-${{ parameters.env }}
+        displayName: Set up kubectl
+      - bash: |
+          kubectl create secret docker-registry shared-registry \
+            --docker-server=${{ parameters.acr_login_server }} \
+            --docker-username=${{ parameters.service_principal_id }} \
+            --docker-password=${{ parameters.service_principal_secret }} \
+            --dry-run=client -o yaml \
+            | kubectl apply -f -
+        displayName: Configure private registry
+      - bash: |
+          set -e
+          yq -i '.stringData.MODEL_STORE_TOKEN=strenv(MODEL_STORE_TOKEN)' k8s/predict/base/secret.yaml
+          yq -i '.stringData.STORAGE_ACCOUNT_NAME_MODELS=strenv(STORAGE_ACCOUNT_NAME_MODELS)' k8s/predict/base/secret.yaml
+          yq -i '.images[0].newTag=strenv(IMAGE_TAG)' k8s/predict/${{ parameters.env }}/kustomization.yaml
+          kustomize build k8s/predict/${{ parameters.env }} -o baked_chart.yaml
+          kubectl apply -f baked_chart.yaml
+        displayName: Deploy prediction image
+        env:
+          IMAGE_TAG: $(Build.BuildNumber)
+          MODEL_STORE_TOKEN: ${{ parameters.model_store_token }}
+          STORAGE_ACCOUNT_NAME_MODELS: ${{ parameters.storage_account_name_models }}
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: baked_chart.yaml
+          artifact: prediction-api-${{ parameters.env }}
+  - job: test
+    pool: AI CoE Peered Agent Pool
+    dependsOn:
+      - deploy
+    steps:
+      - bash: |
+          python3 scripts/test_deployed_api.py --base_url ${{ parameters.test_url }} --build_id $(Build.BuildNumber) --allowed_retries 6 --api predict
+        displayName: Test API is deployed, and that models can predict

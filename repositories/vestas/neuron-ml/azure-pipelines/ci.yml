@@ -1,0 +1,33 @@
+trigger: none
+
+pool:
+  vmImage: "ubuntu-latest"
+
+variables:
+  - name: python_version
+    value: 3.12
+  - name: poetry_version
+    value: 1.8.5
+
+stages:
+  - stage: TestCode
+    displayName: Run tests
+    jobs:
+      - job: Test
+        steps:
+          - template: templates/step-install-python-project.yml
+            parameters:
+              python_version: $(python_version)
+              poetry_version: $(poetry_version)
+          - bash: |
+              just test
+            displayName: Run test for project
+      - job: lint
+        steps:
+          - template: templates/step-install-python-project.yml
+            parameters:
+              python_version: $(python_version)
+              poetry_version: $(poetry_version)
+          - bash: |
+              just lint
+            displayName: Lint project

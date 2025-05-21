@@ -1,0 +1,437 @@
+- name: dlc11
+  data:
+    training_data_file_uri: data/data_full_dlc11.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc12IceF
+  data:
+    training_data_file_uri: data_full_dlc12IceF.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc13
+  data:
+    training_data_file_uri: data_full_dlc13.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc15
+  data:
+    training_data_file_uri: data_full_dlc15.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc21RPY
+  data:
+    training_data_file_uri: data_full_dlc21RPY.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc23CoEog
+  data:
+    training_data_file_uri: data_full_dlc23Detw.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc23NTM
+  data:
+    training_data_file_uri: data_full_dlc23NTM.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc32PREog
+  data:
+    training_data_file_uri: data_full_dlc32Detw.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc32NTM
+  data:
+    training_data_file_uri: data_full_dlc32NTM.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc42RPEog
+  data:
+    training_data_file_uri: data_full_dlc42Detw.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc42NTM
+  data:
+    training_data_file_uri: data_full_dlc42NTM.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc64Id
+  data:
+    training_data_file_uri: data_full_dlc64Id.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+
+- name: dlc64lw
+  data:
+    training_data_file_uri: data_full_dlc64lw.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlc6X
+  data:
+    training_data_file_uri: data_full_dlc6X.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+
+- name: dlcRemEnvExt
+  data:
+    training_data_file_uri: data_full_dlcRemEnvExt.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+
+- name: dlcRemEnvFat
+  data:
+    training_data_file_uri: data_full_dlcRemEnvFat.parquet
+  load_case_model:
+    name: linear_regression
+    params: {}
+  data_splitting:
+    name: random_test_train_split
+  add_features:
+    - name: epb
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: vtl
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: eco
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true
+    - name: power_rating
+      feature_type: raw
+      feature_value_type: discrete
+      safe_domain_method: discrete_validation
+      is_model_input: true

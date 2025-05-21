@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - env:
+            - name: PORT
+              value: "8000"
+          envFrom:
+            - secretRef:
+                name: env
+          image: training-api:latest
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          name: webservice
+          ports:
+            - containerPort: 8000
+              name: http
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          resources:
+            limits:
+              memory: 800Mi
+            requests:
+              cpu: 250m
+              memory: 800Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+      imagePullSecrets:
+        - name: shared-registry
+      securityContext:
+        fsGroup: 2000
+      serviceAccountName: service-account
+      volumes:
+        - emptyDir: {}
+          name: tmp

@@ -1,0 +1,62 @@
+- name: dlc11
+  data:
+    training_data_file_uri: data/data_reduced_dlc11.parquet
+    agg_data_file_uri: data/data_reduced_dlc11_aggregation_groups.parquet
+  data_splitting:
+    name: random_test_train_split
+    params:
+      test_size: 0.2
+  load_case_model:
+    name: linear_regression
+    params:
+      fit_intercept: False
+    model_override:
+      MxBldRoot_m1000:
+        name: constant_regression
+        params:
+          constant: 0
+  calculate_aggregated_metrics:
+    groupby: VscTurbineId
+    weightby: hours
+- name: custom_load_case
+  data:
+    training_data_file_uri: data/data_reduced_dlc11_performance_steps.parquet
+  data_splitting:
+    name: random_test_train_split
+    params:
+      test_size: 0.2
+  load_case_model:
+    name: linear_regression
+    params:
+      fit_intercept: False
+  postprocessor: no_postprocessor
+  feature_list:
+    name: custom_feature_list3
+    features:
+      - name: ws
+        feature_type: raw
+        feature_value_type: continuous
+        is_model_input: true
+        safe_domain_method: range_validation
+      - name: twr_hh
+        feature_type: raw
+        feature_value_type: continuous
+        is_model_input: false
+        safe_domain_method: range_validation
+      - name: vexp
+        feature_type: raw
+        feature_value_type: continuous
+        is_model_input: false
+        safe_domain_method: range_validation
+      - name: wnd_grad
+        feature_type: engineered
+        feature_value_type: continuous
+        is_model_input: true
+  target_list:
+    name: custom_target_list
+    targets:
+      - MxHub_m800
+      - MxBldRoot_m1000
+      - MyHub_m400
+  max_load_evaluation_limit: 0.8
+  calculation_type: fatigue

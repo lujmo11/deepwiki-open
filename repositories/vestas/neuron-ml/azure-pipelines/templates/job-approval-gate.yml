@@ -1,0 +1,20 @@
+# Template to deploy Databricks assets to a specific environment
+parameters:
+  - name: deploy_environment # ADO deployment environment. Only used for approval checks.
+
+jobs:
+  - deployment: ApprovalGate
+    displayName: Approval Gate
+    environment: ${{ parameters.deploy_environment }}
+    pool:
+      vmImage: ubuntu-latest
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: bash@3
+              name: ApprovalGateTask
+              inputs:
+                targetType: "inline"
+                script: |
+                  echo "Approval gate for environment ${{ parameters.deploy_environment }} passed."

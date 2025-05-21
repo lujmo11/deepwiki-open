@@ -1,0 +1,49 @@
+# Template to deploy Databricks assets to a specific environment
+parameters:
+  - name: tenant_id
+  - name: dbx_target # Databricks target workspace to deploy to. Defined in the DBX asset bundle definition.
+  - name: databricks_azure_resource_id # Resource ID of the Azure Databricks workspace.
+  - name: service_principal_id # Azure solution devops service principal ID.
+  - name: service_principal_key # Azure solution devops service principal key.
+  - name: python_version
+  - name: poetry_version
+
+jobs:
+  - job: DeployDBXBundle
+    displayName: Deploy Databricks Bundle
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - checkout: self
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: "${{ parameters.python_version }}"
+        displayName: "Use Python ${{ parameters.python_version }}"
+      - bash: |
+          # Poetry + just
+          pip install poetry==${{ parameters.poetry_version }} rust-just
+          # Install databricks-cli
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+        displayName: Install bootstrap dependencies
+      - template: step-install-python-project.yml
+        parameters:
+          python_version: $(python_version)
+          poetry_version: $(poetry_version)
+      - task: bash@3
+        name: BuildWheel
+        inputs:
+          targetType: "inline"
+          script: |
+            poetry build
+            dobby petrify --requirements-file requirements_dbx_wheel.txt
+      - task: bash@3
+        name: DeployDBXBundles
+        inputs:
+          targetType: "inline"
+          script: |
+            databricks bundle deploy -t ${{ parameters.dbx_target }}
+        env:
+          DATABRICKS_AZURE_RESOURCE_ID: ${{ parameters.databricks_azure_resource_id }}
+          ARM_CLIENT_ID: ${{ parameters.service_principal_id }}
+          ARM_TENANT_ID: ${{ parameters.tenant_id }}
+          ARM_CLIENT_SECRET: ${{ parameters.service_principal_key }}

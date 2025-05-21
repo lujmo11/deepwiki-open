@@ -1,0 +1,165 @@
+# Autoload environment variables from .env file
+set dotenv-load:= true
+git_sha := "local-" + `git rev-parse --short HEAD`
+dbx_username := `databricks current-user me | jq -r '.userName'`
+
+# Install dev dependencies and pre-commit hooks
+install_dev:
+    poetry install --with dev,api
+    poetry export -o requirements_dbx_wheel.txt --without-hashes --without-urls
+    pre-commit install
+
+# Run all tests
+test pytest_args="-n auto":
+	poetry run pytest tests {{ pytest_args }}
+
+# Run all api tests
+test_api pytest_args="-n auto":
+    poetry run pytest tests -m api {{ pytest_args }}
+
+# Test training pipeline code
+test_training pytest_args="-n auto":
+    poetry run pytest tests -m "not api" {{ pytest_args }}
+
+# Run all tests except slow tests
+test_fast pytest_args="-n auto":
+	poetry run pytest tests -m "not slow" {{ pytest_args }}
+
+# Run all pre-commit checks
+lint:
+	pre-commit run --all-files
+
+generate_fixed_prediction_data_for_tests:
+    python scripts/generate_fixed_predictions_for_model_testing.py
+
+create_user_config_from_hydra hydra_overrides="":
+    poetry run python scripts/create_config_from_hydra.py \
+    --hydra-config-folder training_run_config \
+    {{ if hydra_overrides == "" {""} else { "--hydra-overrides" } }} {{ hydra_overrides }} \
+    --train-config-output-path training_run_config/generated_config.yaml
+
+# Parse a user/developer training run config. That is expand the named load cases, add features, etc.
+_parse_developer_config:
+    poetry run python src/neuron_training_service/user_config_parsing.py \
+    --user-train-config-path training_run_config/generated_config.yaml \
+    --parsed-train-config-path training_run_config/generated_config.yaml
+
+# Run a local training pipeline using hydra configuration
+train hydra_overrides="": (create_user_config_from_hydra hydra_overrides) _parse_developer_config
+    poetry run train --train-config-path training_run_config/generated_config.yaml
+
+############################################################
+# Databricks Jobs (deployed to dev workspace)
+############################################################
+_clean_dist:
+    rm -rf dist
+
+_build_dbx_wheel: _clean_dist
+    poetry build
+    poetry export -o requirements_dbx_wheel.txt --without-hashes --without-urls
+    dobby petrify --requirements-file requirements_dbx_wheel.txt
+
+# Deploy DBX artifacts in the dev workspace
+deploy_dbx: _build_dbx_wheel
+    databricks bundle deploy
+
+_train_dbx STORAGE:
+    poetry run python scripts/create_config_from_hydra.py \
+    --hydra-config-folder training_run_config \
+    --train-config-output-path training_run_config/generated_config.yaml 
+    poetry run python scripts/dbx_train_cli.py train training_run_config/generated_config.yaml {{ dbx_username }} \
+    {{ if STORAGE == "local" {"--use-local-source-storage"} else { "" } }}
+
+# Launch training pipeline Databricks job in the dev workspace based on the configuration in the training_run_config folder. STORAGE can be "local" or "".
+train_dbx STORAGE="": deploy_dbx (_train_dbx STORAGE)
+
+# Get the status of a Neuron training Databricks job
+job_status job_id="":
+    poetry run python scripts/dbx_train_cli.py status  {{ job_id }}
+
+############################################################
+# Prediction Service
+############################################################
+
+# Download all turbine variant models and model store artifact
+create_local_model_store_artifact TURBINE_VARIANT_CONFIG_DIR="turbine_variant_build_configs/dev" STORAGE_ACCOUNT_NAME_MODELS="lacneurondevmodelsa":
+    rm -rf artifacts/*
+    poetry run model_store_release \
+    --local-dir artifacts/model_store \
+    --turbine-model-config-folder {{ TURBINE_VARIANT_CONFIG_DIR }} \
+
+
+today := `date -I`
+default_blob := "dev/"+today
+# Build the prediction service docker image. BUILD_NUMBER is used to retrive models from the model store
+build_pred_api BUILD_NUMBER=default_blob:
+    docker build -t neuron_pred_service_img -f src/neuron_prediction_service/Dockerfile . \
+        --build-arg BUILD_NUMBER={{ BUILD_NUMBER }} \
+        --build-arg GIT_SHA={{ git_sha }} \
+        --build-arg AZURE_FEED_TOKEN=$AZURE_FEED_TOKEN
+
+# Run the prediction service locally
+run_pred_api_locally:
+	cd src && poetry run uvicorn neuron_prediction_service.main:app --host 0.0.0.0 --port 8000
+
+# Run the prediction service locally in a docker container
+run_pred_api_locally_in_docker:
+	docker run -p 8000:8000 --env-file=.env neuron_pred_service_img
+
+# Run the prediction service locally in a docker container with a bash shell
+debug_container:
+    docker run -it --entrypoint /bin/bash --env-file=.env neuron_pred_service_img
+
+# Run Locust load test of prediction service
+run_pred_api_locust_load_test:
+    cd scripts/load_test && locust
+
+# Release code on release/ branch
+release:
+    poetry run python scripts/release-process.py
+
+############################################################
+# Training Service
+############################################################
+# Run the training service locally
+run_train_api_locally:
+	cd src && poetry run uvicorn neuron_training_service.api.main:app --host 0.0.0.0 --port 8000 --no-access-log
+
+build_train_api BUILD_NUMBER="dev":
+    docker build -t neuron_train_service_img -f src/neuron_training_service/Dockerfile . \
+        --build-arg BUILD_NUMBER={{ BUILD_NUMBER }} \
+        --build-arg GIT_SHA={{ git_sha }} \
+        --build-arg AZURE_FEED_TOKEN=$AZURE_FEED_TOKEN
+
+# Run the training service locally in a docker container
+run_train_api_locally_in_docker:
+	docker run -p 8000:8000 --env-file=.env neuron_train_service_img
+
+# Rerun old train run in either the dev or prod the training service
+rerun_train_run MLFLOW_RUN_ID ORIGINAL_ENV="dev" NEW_ENV="dev":
+    python scripts/rerun_training/rerun-training.py \
+    --mlflow-run-id {{ MLFLOW_RUN_ID }} \
+    --original-env {{ ORIGINAL_ENV }} \
+    --new-env {{ NEW_ENV }}
+
+############################################################
+# MISC
+############################################################
+
+# Run the data analysis app locally
+run_data_analysis_app:
+    streamlit run scripts/data_analysis_app/Neuron_Data_Analysis.py
+
+# run eval locally
+eval MLFLOW_ID="": (create_user_config_from_hydra) _parse_developer_config
+    poetry run eval --train-config-path training_run_config/generated_config.yaml --mlflow-run-id {{ MLFLOW_ID }}
+
+_eval_dbx MLFLOW_ID:
+    poetry run python scripts/create_config_from_hydra.py \
+    --hydra-config-folder training_run_config \
+    --train-config-output-path training_run_config/generated_config.yaml
+    poetry run python scripts/dbx_eval_cli.py eval training_run_config/generated_config.yaml {{ MLFLOW_ID }} {{ dbx_username }}
+
+# Launch evaluation pipeline job in the dbx dev workspace
+eval_dbx MLFLOW_ID="": deploy_dbx (_eval_dbx MLFLOW_ID)
+

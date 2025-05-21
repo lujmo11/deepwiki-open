@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../base
+
+patches:
+  - target:
+      kind: Ingress
+      name: ingress
+    path: ingress-patch.yaml
+
+nameSuffix: -prod
+namespace: neuron-prod
+
+images:
+  - name: training-api
+    newName: lacneuronprod.azurecr.io/training-api
+    newTag: latest

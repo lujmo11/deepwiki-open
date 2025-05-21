@@ -1,0 +1,159 @@
+- name: dlc11
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc11.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlc12IceF
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc12IceF.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlc13
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc13.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlc15
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc15.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlc21RPY
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc21RPY.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlc23CoEog
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc23CoEog.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlc23NTM
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc23NTM.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlc32PREog
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc32PREog.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlc32NTM
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc32NTM.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlc42RPEog
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc42RPEog.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlc42NTM
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc42NTM.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlc64Id
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc64Id.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlc64LW
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc64LW.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlc6X
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlc62.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlcRemEnvExt
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlcRemEnvExt.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
+
+- name: dlcRemEnvFat
+  data:
+    training_data_file_uri: v162_5600_mk0a_1.4/data_v162_5600_mk0a_1.4_dlcRemEnvFat-ws-bin.parquet
+  data_splitting:
+    name: random_test_train_split
+    params: {}
+  load_case_model:
+    name: linear_regression
+    params: {}
